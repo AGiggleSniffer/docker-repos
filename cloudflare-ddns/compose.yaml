@@ -1,0 +1,13 @@
+services:
+  cloudflare-ddns:
+    image: favonia/cloudflare-ddns:latest
+    container_name: cloudflare-ddns
+    env_file:
+      - ./.env
+    restart: unless-stopped # Ensures it restarts if it crashes, but not if you stop it manually
+    #volumes: # Optional: If you want to persist logs or config, but not strictly necessary
+    #  - ./config:/config
+    user: "1000:1000"
+    read_only: true
+    cap_drop: [all]
+    security_opt: [no-new-privileges:true]

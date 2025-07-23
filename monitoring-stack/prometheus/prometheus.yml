@@ -1,0 +1,22 @@
+global:
+  scrape_interval: 15s # How frequently to scrape targets.
+  evaluation_interval: 15s # How frequently to evaluate rules.
+
+scrape_configs:
+  - job_name: 'prometheus' # Scrape Prometheus itself
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'grafana' # Scrape Grafana
+    static_configs:
+      - targets: ['grafana:3000']
+
+  - job_name: 'loki' # Scrape Loki
+    static_configs:
+      - targets: ['loki:3100']
+
+  # Example: Scrape Docker daemon metrics
+  # You might need to expose the Docker daemon's metrics endpoint or use cAdvisor
+  # - job_name: 'docker'
+  #   static_configs:
+  #     - targets: ['<your-docker-host-ip>:9323'] # Or use cAdvisor if you run it
