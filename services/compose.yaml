@@ -1,0 +1,6 @@
+include:
+  - ./cloudflare-ddns/compose.yaml
+  - ./cloudflare-tunnel/compose.yaml
+  # - ./monitoring-stack/compose.yaml
+  - ./portainer/compose.yaml
+  # - ./proxy-manager/compose.yaml
