@@ -1,3 +1,3 @@
 include:
   - services/compose.yaml
-  - servers/compose.yaml
+  - server/compose.yaml
