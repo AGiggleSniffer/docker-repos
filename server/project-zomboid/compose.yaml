@@ -4,7 +4,7 @@ services:
     container_name: steamcmd_pzd_downloader # Renamed for clarity
     volumes:
       - ./project_zomboid_server_data:/home/steam/pz_server # Dedicated volume for PZ
-    command: /home/steam/steamcmd/steamcmd.sh +login anonymous +force_install_dir /home/steam/pz_server +app_update 380870 validate +quit
+    command: /home/steam/steamcmd/steamcmd.sh +force_install_dir /home/steam/pz_server +login anonymous  +app_update 380870 validate +quit
     restart: "no"
 
   project_zomboid_server:
