@@ -15,7 +15,7 @@ services:
     image: openjdk:17-jdk-slim # A common choice for Java-based servers like PZ
     container_name: project_zomboid_server
     depends_on:
-      - steamcmd_pzd_downloader
+      - steamcmd_pz_downloader
     ports:
       # Default PZ ports. You might need more if you have many players or specific mods.
       - "16261:16261/udp" # Game traffic
@@ -42,3 +42,4 @@ services:
     # We'll override this with 'bash' initially to allow manual setup.
     # After setup, you'll update this or use 'docker exec' to start the server.
     command: sleep infinity
+    user: "1000:1000"
