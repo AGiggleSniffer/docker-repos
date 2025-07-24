@@ -1,0 +1,28 @@
+services:
+  steamcmd_sf_downloader:
+    image: cm2network/steamcmd
+    container_name: steamcmd_sf_downloader
+    volumes:
+      - ./steamcmd_script.txt:/home/steam/steamcmd_script.txt
+      - ./sf_server_data:/home/steam/sf_server
+    command: /home/steam/steamcmd/steamcmd.sh +runscript /home/steam/steamcmd_script.txt
+    restart: "no"
+    user: "1000:1000"
+
+  satisfactory_server:
+    # We'll use a generic Linux base image here as we're setting it up manually
+    # Often, 'ubuntu:latest' or 'debian:latest' are good choices for this.
+    image: openjdk:17-jdk-slim # A common choice for Java-based servers
+    container_name: satisfactory_server
+    depends_on:
+      - steamcmd_sf_downloader
+    ports:
+      - "8080:8080"
+    volumes:
+      # Mount the same data directory where SteamCMD put the files
+      - ./sf_server_data:/opt/sf_server
+    # environment:
+      # You might also want to set the server's name here for easier identification in logs
+      # SERVER_NAME: "My Awesome PZ Server"
+    restart: always
+    command: sleep infinity

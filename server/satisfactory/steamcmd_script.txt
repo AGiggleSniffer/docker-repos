@@ -1,0 +1,5 @@
+@NoPromptForPassword 1
+force_install_dir "/home/steam/sf_server"
+login anonymous
+app_update 1690800 verify
+quit
