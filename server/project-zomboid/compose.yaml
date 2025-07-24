@@ -3,16 +3,18 @@ services:
     image: cm2network/steamcmd
     container_name: steamcmd_pzd_downloader # Renamed for clarity
     volumes:
-      - ./project_zomboid_server_data:/home/steam/pz_server # Dedicated volume for PZ
-    command: /home/steam/steamcmd/steamcmd.sh +force_install_dir /home/steam/pz_server +login anonymous  +app_update 380870 validate +quit
+      - ./steamcmd_script.txt:/home/steam/steamcmd_script.txt
+      - ./pz_server_data:/home/steam/pz_server
+    command: /home/steam/steamcmd/steamcmd.sh +runscript /home/steam/steamcmd_script.txt
     restart: "no"
+    user: "1000:1000"
 
   project_zomboid_server:
     # We'll use a generic Linux base image here as we're setting it up manually
     # Often, 'ubuntu:latest' or 'debian:latest' are good choices for this.
     # For PZ, you'll need a Java runtime, so a Java-enabled base is ideal, or you install it.
     image: openjdk:17-jdk-slim # A common choice for Java-based servers like PZ
-    container_name: project_zomboid_dedicated_server
+    container_name: project_zomboid_server
     depends_on:
       - steamcmd_pzd_downloader
     ports:
@@ -23,7 +25,7 @@ services:
       - "8767:8767/udp"   # Steam authentication
     volumes:
       # Mount the same data directory where SteamCMD put the files
-      - ./project_zomboid_server_data:/opt/pz_server
+      - ./pz_server_data:/opt/pz_server
       # PZ also stores user data (saves, configs, logs) in the user's home directory.
       # It's highly recommended to mount this as a separate persistent volume.
       # The default location for PZ server data is usually ~/.cache/Server or ~/Zomboid/Server
