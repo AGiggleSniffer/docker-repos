@@ -1,10 +1,10 @@
 services:
-  steamcmd_pzd_downloader:
+  steamcmd_pz_downloader:
     image: cm2network/steamcmd
-    container_name: steamcmd_pzd_downloader # Renamed for clarity
+    container_name: steamcmd_pz_downloader
     volumes:
       - ./steamcmd_script.txt:/home/steam/steamcmd_script.txt
-      - ./pz_server_data:/home/steam/pz_server
+      - ./pz_server_data/server:/home/steam/pz_server
     command: /home/steam/steamcmd/steamcmd.sh +runscript /home/steam/steamcmd_script.txt
     restart: "no"
     user: "1000:1000"
@@ -12,7 +12,6 @@ services:
   project_zomboid_server:
     # We'll use a generic Linux base image here as we're setting it up manually
     # Often, 'ubuntu:latest' or 'debian:latest' are good choices for this.
-    # For PZ, you'll need a Java runtime, so a Java-enabled base is ideal, or you install it.
     image: openjdk:17-jdk-slim # A common choice for Java-based servers like PZ
     container_name: project_zomboid_server
     depends_on:
@@ -25,19 +24,19 @@ services:
       - "8767:8767/udp"   # Steam authentication
     volumes:
       # Mount the same data directory where SteamCMD put the files
-      - ./pz_server_data:/opt/pz_server
+      - ./pz_server_data/server:/opt/pz_server
       # PZ also stores user data (saves, configs, logs) in the user's home directory.
       # It's highly recommended to mount this as a separate persistent volume.
       # The default location for PZ server data is usually ~/.cache/Server or ~/Zomboid/Server
       # We'll use a new volume for that here:
-      - ./project_zomboid_user_data:/root/Zomboid # Assuming running as root, adjust if needed
+      - ./pz_server_data/users:/root/Zomboid # Assuming running as root, adjust if needed
     environment:
       # Project Zomboid typically requires Java memory arguments.
       # Adjust these based on your server's RAM.
       # For example, -Xms4g -Xmx8g means min 4GB, max 8GB.
       PZ_JAVA_OPTS: "-Xms1G -Xmx2G"
       # You might also want to set the server's name here for easier identification in logs
-      # SERVER_NAME: "My Awesome PZ Server"
+      # SERVER_NAME: "My Awesome Server"
     restart: always
     # Project Zomboid server will typically be launched via a startup script.
     # We'll override this with 'bash' initially to allow manual setup.

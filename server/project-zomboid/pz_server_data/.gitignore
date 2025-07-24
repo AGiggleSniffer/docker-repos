@@ -1,2 +1,6 @@
+!server/.gitkeep
+server/*
+
 *
 !.gitignore
+!.gitkeep

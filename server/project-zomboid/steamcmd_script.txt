@@ -1,4 +1,5 @@
 @NoPromptForPassword 1
 force_install_dir "/home/steam/pz_server"
 login anonymous
-app_update 380870
+app_update 380870 verify
+quit
