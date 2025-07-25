@@ -12,10 +12,11 @@ services:
   satisfactory_server:
     # We'll use a generic Linux base image here as we're setting it up manually
     # Often, 'ubuntu:latest' or 'debian:latest' are good choices for this.
-    image: openjdk:17-jdk-slim # A common choice for Java-based servers
+    image: debian:stable-slim
     container_name: satisfactory_server
     depends_on:
-      - steamcmd_sf_downloader
+      steamcmd_sf_downloader:
+        condition: service_completed_successfully
     ports:
       - "7777:7777"
     volumes:
@@ -25,5 +26,5 @@ services:
       # You might also want to set the server's name here for easier identification in logs
       # SERVER_NAME: "My Awesome PZ Server"
     restart: always
-    command: ./home/opt/sf_server/FactoryServer.sh
+    command: ./opt/sf_server/FactoryServer.sh
     user: "1000:1000"

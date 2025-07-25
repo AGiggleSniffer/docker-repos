@@ -1,70 +1,56 @@
-version: '3.8'
-
 services:
   grafana:
-    image: grafana/grafana:latest
-    container_name: grafana
+    extends:
+      file: ./grafana/compose.yaml
+      service: grafana
     ports:
       - "3000:3000"
-    volumes:
-      - grafana_data:/var/lib/grafana
-      - ./grafana/provisioning/:/etc/grafana/provisioning/
-      - ./grafana/dashboards_json/:/var/lib/grafana/dashboards
-    environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=admin
-    depends_on:
-      - prometheus
-      - loki
-    restart: unless-stopped
     networks:
       - monitoring-net
+
 
   prometheus:
-    image: prom/prometheus:latest
-    container_name: prometheus
-    ports:
-      - "9090:9090"
-    volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-      - prometheus_data:/prometheus
-    command: --config.file=/etc/prometheus/prometheus.yml --web.enable-remote-write-receiver --storage.tsdb.retention.time=15d
-    restart: unless-stopped
+    extends:
+      file: ./prometheus/compose.yaml
+      service: prometheus
+    expose:
+      - "9090"
+    # Not needed, link to grafana using service name ex: 'prometheus:9090'
+    # ports:
+    #   - "9090:9090" 
+    networks:
+      - monitoring-net
+    # for access to node exporter *unsafe* 
+    # create firewalls to block access to other ports not needed from docker networks
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+
+  cadvisor:
+    extends:
+      file: ./cadvisor/compose.yaml
+      service: cadvisor
+    expose:
+      - "8080"
+    # Not needed, link to prometheus using service name ex: 'cadvisor:8080'
+    # ports:
+    #   - "8080:8080" 
     networks:
       - monitoring-net
 
-  loki:
-    image: grafana/loki:latest
-    container_name: loki
-    ports:
-      - "3100:3100" # Loki's default port
-    volumes:
-      - ./loki/config.yaml:/etc/loki/config.yaml
-      - loki_data:/loki
-    command: -config.file=/etc/loki/config.yaml
-    restart: unless-stopped
-    networks:
-      - monitoring-net
+      
+  redis:
+    image: redis:latest
+    container_name: redis
+    expose:
+      - "6379"
 
-  promtail:
-    image: grafana/promtail:latest
-    container_name: promtail
-    volumes:
-      - /var/log:/var/log # Mount host logs (adjust as needed for Docker logs)
-      - /var/lib/docker/containers:/var/lib/docker/containers:ro # For Docker container logs
-      - ./loki/config.yaml:/etc/promtail/config.yaml # Promtail uses the same config file for Loki setup
-    command: -config.file=/etc/promtail/config.yaml
-    depends_on:
-      - loki
-    restart: unless-stopped
-    networks:
-      - monitoring-net
 
 networks:
   monitoring-net:
     driver: bridge
 
+
 volumes:
-  grafana_data:
-  prometheus_data:
-  loki_data:
+  grafana_data: {}
+  prometheus_data: {}

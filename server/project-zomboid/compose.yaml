@@ -13,15 +13,20 @@ services:
     # We'll use a generic Linux base image here as we're setting it up manually
     # Often, 'ubuntu:latest' or 'debian:latest' are good choices for this.
     image: openjdk:17-jdk-slim # A common choice for Java-based servers like PZ
+
     container_name: project_zomboid_server
+
     depends_on:
-      - steamcmd_pz_downloader
+      steamcmd_pz_downloader:
+        condition: service_completed_successfully
+
     ports:
       # Default PZ ports. You might need more if you have many players or specific mods.
       - "16261:16261/udp" # Game traffic
       - "16262:16262/udp" # Game traffic
       - "8766:8766/udp"   # Steam authentication
       - "8767:8767/udp"   # Steam authentication
+
     volumes:
       # Mount the same data directory where SteamCMD put the files
       - ./pz_server_data/server:/opt/pz_server
@@ -30,16 +35,12 @@ services:
       # The default location for PZ server data is usually ~/.cache/Server or ~/Zomboid/Server
       # We'll use a new volume for that here:
       - ./pz_server_data/users:/root/Zomboid # Assuming running as root, adjust if needed
-    environment:
-      # Project Zomboid typically requires Java memory arguments.
-      # Adjust these based on your server's RAM.
-      # For example, -Xms4g -Xmx8g means min 4GB, max 8GB.
-      PZ_JAVA_OPTS: "-Xms1G -Xmx2G"
-      # You might also want to set the server's name here for easier identification in logs
-      # SERVER_NAME: "My Awesome Server"
-    restart: always
+
     # Project Zomboid server will typically be launched via a startup script.
     # We'll override this with 'bash' initially to allow manual setup.
     # After setup, you'll update this or use 'docker exec' to start the server.
-    command: sleep infinity
+    command: ./opt/pz_server/start-server.sh -servername ${SERVER_NAME} -adminpassword ${SERVER_ADMIN_PASSWORD}
+
+    restart: no
+
     user: "1000:1000"
