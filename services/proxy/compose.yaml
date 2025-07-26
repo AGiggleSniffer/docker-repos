@@ -1,0 +1,8 @@
+services:
+  proxy:
+    image: traefik:latest
+    container_name: traefik
+    ports:
+      - "80:80"
+    volumes:
+      - ./traefik.yml:/etc/traefik/traefik.yml

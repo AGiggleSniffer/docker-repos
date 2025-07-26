@@ -1,3 +1,5 @@
 include:
-  - ./project-zomboid/compose.yaml
   - ./web-server/compose.yaml
+  - ./mealie/compose.yaml
+  - ./project-zomboid/compose.yaml
+  - ./satisfactory/compose.yaml
