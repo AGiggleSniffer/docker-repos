@@ -1,0 +1,3 @@
+[Web]
+title=Web HTTP/HTTPS
+ports=80|443

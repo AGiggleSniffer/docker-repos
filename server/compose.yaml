@@ -1,5 +1,7 @@
 include:
   - ./web-server/compose.yaml
   - ./mealie/compose.yaml
-  - ./project-zomboid/compose.yaml
-  - ./satisfactory/compose.yaml
+  #- ./project-zomboid/compose.yaml
+  #- ./satisfactory/compose.yaml
+  #- ./satisfactory-renegade/compose.yaml
+  - ./satisfactory-wolveix/compose.yaml
