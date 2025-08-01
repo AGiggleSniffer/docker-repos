@@ -1,3 +1,4 @@
 [Grafana]
 title=Grafana
+description=Monitoring
 ports=3000

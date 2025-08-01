@@ -20,11 +20,11 @@ scrape_configs:
     static_configs:
       - targets: ['prometheus:9090']
 
-  - job_name: g-server
+  - job_name: kitten
     static_configs:
       - targets: ['host.docker.internal:9100']
 
-  - job_name: cadvisor_g-server
+  - job_name: cadvisor_kitten
     scrape_interval: 5s
     static_configs:
       - targets: ['cadvisor:8080']

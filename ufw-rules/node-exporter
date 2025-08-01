@@ -1,0 +1,4 @@
+[Node-Exporter]
+title=Node-Exporter
+description=Monitoring
+ports=9100/tcp

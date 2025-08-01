@@ -1,3 +1,4 @@
 [Web]
 title=Web HTTP/HTTPS
+description=Web Traffic
 ports=80|443

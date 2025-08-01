@@ -13,11 +13,8 @@ services:
     extends:
       file: ./prometheus/compose.yaml
       service: prometheus
-    expose:
-      - "9090"
-    # Not needed, link to grafana using service name ex: 'prometheus:9090'
-    # ports:
-    #   - "9090:9090" 
+    ports:
+      - "9090:9090"
     networks:
       - monitoring-net
     # for access to node exporter *unsafe* 
