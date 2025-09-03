@@ -1,0 +1,5 @@
+@NoPromptForPassword 1
+force_install_dir "/"
+login anonymous
+app_update 3246670 verify
+quit

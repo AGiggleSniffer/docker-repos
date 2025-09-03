@@ -1,0 +1,10 @@
+services:
+  aska:
+    image: fragsoc/steamcmd-wine-xvfb
+    container_name: aska
+    restart: unless-stopped
+    ports:
+      - "7778:7777"
+      - "27015:27015/udp"
+
+    hostname: "aska"
